@@ -39,7 +39,10 @@ const LandingScreen = () => {
           title="GET STARTED"
           onPressedFun={() => navigation.navigate("Login")}
         />
+
       </View>
+
+        
     </SafeAreaView>
   );
 };
