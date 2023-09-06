@@ -4,7 +4,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RegisterScreen from "../screens/RegisterScreen";
 import LandingScreen from "../screens/LandingScreen";
-import SafeRoute from "../screens/SafeRouteScreen";
 import ForgotPassword from "../screens/ForgotPassword";
 
 const Stack = createNativeStackNavigator();
