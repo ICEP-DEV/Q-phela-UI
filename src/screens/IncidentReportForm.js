@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Heading from "../components/landing-screen/Heading";
 import axios from 'axios';
+import { useNavigation } from "@react-navigation/native";
 
 //const API_BASE_URL = 'http://localhost:3003'; // Update with your server's URL
 
@@ -12,6 +13,7 @@ const incidentTypes = [
 ];
 
 const IncidentReportForm = () => {
+  const navigation = useNavigation(); 
   const [incident, setIncident] = useState({
     location: '',
     incidentType: '',
@@ -19,35 +21,53 @@ const IncidentReportForm = () => {
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const {name, value } = e.target;
     setIncident({
       ...incident,
       [name]: value,
     });
   };
-   
+  const [rep_description, setDescription]=useState('')
+  const [ incident_type, setIncidentType]=useState('')
+  const [error, setError] = useState('');
+ 
   const handleSubmit = async (e) => {
     var citizen_id=localStorage.getItem("citizen_id")
-    var locaton=localStorage.getItem("name")
-    var report={rep_description:incident.description,incident_type:incident.incidentType, citizen_id:Number(citizen_id)}
+    var location=localStorage.getItem("location_id")
+    
+    var report={
+
+      rep_description:incident.description,
+      incident_type:incident.incidentType, 
+      citizen_id:Number(citizen_id)
+    
+    }
+
     console.log(report)
     e.preventDefault();
 
     try {
-      const response = await axios.post(`http://localhost:3003/report`, {
+      const response = await axios.post(`http://localhost:3003/reports`, {
         location: localStorage.getItem("location_id"),
-        incidentType: incident.incidentType,
-        description: incident.description,
+        incident_type: incident.incidentType,
+        rep_description:incident.description,
         citizen_id: localStorage.getItem("citizen_id"), // Replace with the actual citizen ID
-      });
+      }, report);
+
+      
+
+      /*const response = await axios.post('http://localhost:3003/reports', report);
+
+      console.log('Server response:', response.report); */
 
       if (response.status === 201) {
         console.log('Report created successfully');
         setIncident({
-          location: '',
-          incidentType: '',
-          description: '',
+          citizen_id: '',
+          incident_type: '',
+          rep_description: '',
         });
+        //navigation.navigate('Login');
       }
     } catch (error) {
       console.error('Error creating report:', error);
@@ -143,8 +163,11 @@ const IncidentReportForm = () => {
             <input
               type="text"
               name="location"
+              placeholder="Enter your location"
               value={incident.location}
+              mode="text"
               onChange={handleChange}
+              secure={true}
               className="enter-location"
             />
           </div>
@@ -157,10 +180,13 @@ const IncidentReportForm = () => {
                   <input
                     type="radio"
                     name="incidentType"
+                    mode="text"
                     value={type.value}
                     onChange={handleChange}
+                    onChangeText={(e)=> setIncidentType(e)}
                     checked={incident.incidentType === type.value}
                     className="radio-input"
+                    secure={true}
                   />
                   {type.label}
                 </label>
@@ -172,15 +198,20 @@ const IncidentReportForm = () => {
             <label className="incident-description-label">Incident Description:</label>
             <textarea
               name="description"
+              mode="text"
+              secure={true}
+              placeholder="Type your description"
               value={incident.description}
               onChange={handleChange}
+              onChangeText={(e)=> setDescription(e)}
               className="incident-description"
             />
           </div>
 
           <div className="btn-container">
-            <button type="submit" className="btn">
+            <button type="submit" className="btn" onPressedFun={handleSubmit}>
               Submit
+              
             </button>
           </div>
         </form>
