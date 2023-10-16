@@ -22,15 +22,20 @@ const TipsPage = ({ citizen }) => {
   useEffect(() => {
     // Fetch safety tips when the component mounts
     fetchSafetyTips();
-    
   }, []);
+
+  const welcomeMessage = `Welcome ${localStorage.getItem("citizen_name")}`;
 
   const fetchSafetyTips = () => {
     setLoading(true);
     axios
       .get("http://localhost:3006/safety_tip/")
       .then((response) => {
-        setTips(response.data);
+        // Sort the tips by date in descending order (newest first)
+        const sortedTips = response.data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setTips(sortedTips);
         setLoading(false);
       })
       .catch((error) => {
@@ -39,20 +44,18 @@ const TipsPage = ({ citizen }) => {
         console.error("Error fetching safety tips:", error);
       });
   };
- 
-  
-  const handleAddTip = () => {
-    var citizen_id=localStorage.getItem("citizen_id")
 
-    var tip={tip_description:tipText, citizen_id:Number(citizen_id)}
-    
+  const handleAddTip = () => {
+    var citizen_id = localStorage.getItem("citizen_id");
+
+    var tip = { tip_description: tipText, citizen_id: Number(citizen_id) };
+
     if (!tipText) {
       setError('Tip text or citizen information is missing.');
       return;
     }
 
     setLoading(true);
-    //const newTip = { tip_description: tipText, citizen_id: citizen.citizen_id };
     axios
       .post(`${API_BASE_URL}/safety_tip`, tip, {
         headers: {
@@ -73,10 +76,17 @@ const TipsPage = ({ citizen }) => {
         setLoading(false);
       });
   };
+/*gvgyvgyyyununini*/
+  const formatDate = (dateString) => {
+    const dateObj = new Date(dateString);
+    return dateObj.toLocaleDateString(); // Formats the date as per locale
+  };
 
   return (
     <View style={styles.container}>
       <Heading />
+      <Text style={styles.welcomeMessage}>{welcomeMessage}!</Text>
+
       <Text style={styles.listTitle} textAlign="center">
         Alert Community
       </Text>
@@ -87,17 +97,23 @@ const TipsPage = ({ citizen }) => {
           data={tips}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <View style={styles.commentContainer}>
-              <Text style={styles.tipAndUser}>
-                <Text style={[styles.username, { textAlign: 'center' }]}>
-                  {item.citizen_name}:
-                </Text>{' '}
-                <Text style={styles.tip} textAlign="center">
-                  {item.tip_description}
+            <View>
+              <View style={styles.commentContainer}>
+                <Text style={styles.tipAndUser}>
+                  <Text style={[styles.username, { textAlign: 'center' }]}>
+                    {item.citizen_name}:
+                  </Text>{' '}
+                  <Text style={styles.tip} textAlign="center">
+                    {item.tip_description}
+                   
+                  </Text>
                 </Text>
+              </View>
+              <Text style={styles.date}>
+                Date: {formatDate(item.date)}
               </Text>
-              <Text style={styles.date}>{`Date: ${formatDate(item.date)}`}</Text>
             </View>
+
           )}
           ListEmptyComponent={() => (
             <Text style={[styles.emptyList, { textAlign: 'center' }]}>
@@ -119,19 +135,13 @@ const TipsPage = ({ citizen }) => {
         />
         <View style={styles.buttonContainer}>
           <Pressable onPress={handleAddTip} style={styles.pressableButton}>
-            <Text style={styles.buttonText}>Add Tip</Text>
+            <Text style={[styles.buttonText, { color: 'white', textAlign: 'center' }]}>Add Tip</Text>
           </Pressable>
         </View>
       </View>
     </View>
   );
 };
-
-const formatDate = (dateString) => {
-  const dateObj = new Date(dateString);
-  return dateObj.toLocaleDateString(); // Formats the date as per locale
-};
-
 
 const styles = StyleSheet.create({
   container: {
@@ -149,27 +159,29 @@ const styles = StyleSheet.create({
   commentContainer: {
     borderWidth: 1,
     borderColor: "#ccc",
+    width: 260,
+    height:70,
     borderRadius: 4,
+    backgroundColor: "#D9D9D9",
     padding: 8,
-    marginBottom: 8,
+    marginBottom: 8, // Add margin at the bottom
   },
   tipAndUser: {
     flexDirection: "row",
     alignItems: "center",
   },
   username: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginRight: 8,
-    textAlign: "center", // Center-align the text
+    textAlign: 'center',
   },
   tip: {
     fontSize: 16,
-    textAlign: "center", // Center-align the text
+    textAlign: "center",
   },
   emptyList: {
     fontSize: 16,
     color: "#777",
-   
   },
   inputContainer: {
     flexDirection: "column",
@@ -180,23 +192,33 @@ const styles = StyleSheet.create({
     width: 363,
     height: 51,
     marginBottom: 8,
-    backgroundColor: "#D9D9D9", // Set the background color to light grey
+    backgroundColor: "#D9D9D9",
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 6, // Set the corner radius to 6
+    borderRadius: 6,
     padding: 8,
-    textAlign: "center", // Center-align the text
+    textAlign: "center",
   },
   buttonContainer: {
     width: 82,
     height: 28,
-    alignSelf: "flex-end", // Align the button to the right
-    borderRadius: 6, // Set the corner radius of the button to 6
+    backgroundColor: "black",
+    alignSelf: "flex-end",
+    borderRadius: 6,
   },
   date: {
     fontSize: 14,
-    textAlign: 'left',
+    textAlign: 'center',
     color: '#777',
+    marginLeft: 16,
+  },  
+  welcomeMessage: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginLeft: 16,
+    marginTop: 16,
+    marginBottom: 16,
   },
 });
 

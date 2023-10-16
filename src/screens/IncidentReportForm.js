@@ -9,38 +9,91 @@ const incidentTypes = [
   { label: 'Car jacking', value: 'Car jacking' },
   { label: 'Robbery', value: 'Robbery' },
   { label: 'Kidnapping', value: 'Kidnapping' },
-  // Add more incident types as needed
+  { label: 'Other', value: 'Other' },
+ 
 ];
 
 const IncidentReportForm = () => {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const [incident, setIncident] = useState({
     location: '',
     incidentType: '',
     description: '',
+    customIncidentType: '',
   });
 
+
+
+ 
   const handleChange = (e) => {
-    const {name, value } = e.target;
-    setIncident({
-      ...incident,
-      [name]: value,
-    });
+    const { name, value } = e.target;
+    if (name === 'incidentType') {
+      setIncident({
+        ...incident,
+        incidentType: value,
+        customIncidentType: '', // Clear custom incident type when a predefined type is selected
+      });
+    } else if (name === 'customIncidentType') {
+      setIncident({
+        ...incident,
+        customIncidentType: value,
+      });
+    } else {
+      setIncident({
+        ...incident,
+        [name]: value,
+      });
+    }
   };
   const [rep_description, setDescription]=useState('')
   const [ incident_type, setIncidentType]=useState('')
   const [error, setError] = useState('');
  
+
+
   const handleSubmit = async (e) => {
+    e.preventDefault();
+ 
+    const { location, incidentType, description, customIncidentType } = incident;
+    const citizen_id = localStorage.getItem("citizen_id");
+    const location_id = localStorage.getItem("location_id");
+ 
+    const report = {
+      incident_type: incidentType === 'Other' ? customIncidentType : incidentType,
+      rep_description: description,
+      name: location, // Assuming 'name' corresponds to the location in your backend
+      citizen_id: Number(citizen_id),
+    };
+    console.log(report)
+ 
+    try {
+      const response = await axios.post('http://localhost:3007/reports', report);
+ 
+      if (response.status === 201) {
+        console.log('Report created successfully');
+        setIncident({
+          location: '',
+          incidentType: '',
+          description: '',
+          customIncidentType: '',
+        });
+      }
+    } catch (error) {
+      console.error('Error creating report:', error);
+    }
+  };
+ 
+
+ /* const handleSubmit = async (e) => {
     var citizen_id=localStorage.getItem("citizen_id")
     var location=localStorage.getItem("location_id")
-    
+   
     var report={
 
       rep_description:incident.description,
-      incident_type:incident.incidentType, 
+      incident_type:incident.incidentType,
       citizen_id:Number(citizen_id)
-    
+   
     }
 
     console.log(report)
@@ -54,11 +107,11 @@ const IncidentReportForm = () => {
         citizen_id: localStorage.getItem("citizen_id"), // Replace with the actual citizen ID
       }, report);
 
-      
+     
 
       /*const response = await axios.post('http://localhost:3003/reports', report);
 
-      console.log('Server response:', response.report); */
+      console.log('Server response:', response.report);
 
       if (response.status === 201) {
         console.log('Report created successfully');
@@ -74,6 +127,16 @@ const IncidentReportForm = () => {
     }
 
    
+  };*/
+
+  const handleIncidentTypeChange = (e) => {
+    const selectedIncidentType = e.target.value;
+    if (selectedIncidentType === 'Other') {
+      setDescription(''); // Clear description when 'Other' is selected
+      setIncidentType('Other');
+    } else {
+      setIncidentType(selectedIncidentType);
+    }
   };
 
   return (
@@ -152,6 +215,19 @@ const IncidentReportForm = () => {
           .incident-description-label {
             text-align: center;
           }
+
+         
+
+          .custom-incident-input {
+            width: calc(100% - 20px); /* Adjust the width to accommodate padding */
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 10px;
+          }
+
+
         `}
       </style>
       <Heading />
@@ -165,9 +241,7 @@ const IncidentReportForm = () => {
               name="location"
               placeholder="Enter your location"
               value={incident.location}
-              mode="text"
               onChange={handleChange}
-              secure={true}
               className="enter-location"
             />
           </div>
@@ -180,19 +254,32 @@ const IncidentReportForm = () => {
                   <input
                     type="radio"
                     name="incidentType"
-                    mode="text"
                     value={type.value}
                     onChange={handleChange}
-                    onChangeText={(e)=> setIncidentType(e)}
                     checked={incident.incidentType === type.value}
                     className="radio-input"
-                    secure={true}
                   />
                   {type.label}
                 </label>
               ))}
             </div>
           </div>
+{incident.incidentType === 'Other' && (
+   <div className="form-group">
+    <label>Custom Incident Type:</label>
+                <input
+                  type="text"
+                  name="customIncidentType"
+                  placeholder="Enter custom incident type"
+                  value={incident.customIncidentType}
+                 
+                 onChange={handleChange}
+                 className="custom-incident-input"
+                />
+             
+            </div>
+)}
+         
 
           <div className="form-group">
             <label className="incident-description-label">Incident Description:</label>
@@ -211,7 +298,7 @@ const IncidentReportForm = () => {
           <div className="btn-container">
             <button type="submit" className="btn" onPressedFun={handleSubmit}>
               Submit
-              
+             
             </button>
           </div>
         </form>

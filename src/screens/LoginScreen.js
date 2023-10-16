@@ -33,7 +33,8 @@ export default function LoginScreen() {
         navigation.navigate('TipsPage')
         return;
       }
-      else{
+      else{  
+              
 
         return
       }

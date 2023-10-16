@@ -35,16 +35,16 @@ const Heading = () => {
         <View style={styles.dropdown}>
           {/* Add your dropdown buttons here */}
           <TouchableOpacity onPress={() => navigateToAnotherPage("IncidentReportForm")}>
-            <Text>Create Experiment</Text>
+            <Text>Create Incident Report</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigateToAnotherPage("TipsPage")}>
-            <Text>Create Tip</Text>
+            <Text>Add Tip and View</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigateToAnotherPage("CreateTip")}>
-            <Text>Create Trip</Text>
+          <TouchableOpacity onPress={() => navigateToAnotherPage("AdminReport")}>
+            <Text>View Report</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigateToAnotherPage("CreateTip")}>
-            <Text>about us</Text>
+          <TouchableOpacity onPress={() => navigateToAnotherPage("AdminTips")}>
+            <Text>Tip update</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigateToAnotherPage("Login")}>
             <Text>Log Out</Text>
