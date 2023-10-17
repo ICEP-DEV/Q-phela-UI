@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome icons
 
 const AdminReport = () => {
+    const navigation = useNavigation(); // Initialize navigation
+
   const [reports, setReports] = useState([]);
   const [contactInfo, setContactInfo] = useState({});
   const [clickedReportId, setClickedReportId] = useState(null);
@@ -56,9 +60,17 @@ const AdminReport = () => {
  
 
   return (
-    <ScrollView style={styles.container}>
-    <Text style={styles.header}>Incident Reports</Text>
-
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Incident Reports</Text>
+        {/* Back Button */}
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()} // Navigate back to the previous screen
+        >
+          <FontAwesome name="arrow-left" size={24} color="blue" />
+        </TouchableOpacity>
+      </View>
     {reports.map((report, index) => (
       <View key={index} style={styles.reportContainer}>
         {/* Display incident type and description */}
@@ -66,35 +78,31 @@ const AdminReport = () => {
         <Text>{report.incident_type}</Text>
         <Text style={styles.label}>Description:</Text>
         <Text>{report.rep_description}</Text>
-        <Text style={styles.label}>Location:</Text>
-        <Text>{[report.report_id].location_id}</Text>
-
-        {/* Contact Button */}
-        <TouchableOpacity
-          style={styles.contactButton}
-          onPress={() => handleContactClick(report)}
-        >
-          <Text style={styles.contactButtonText}>Contact</Text>
-        </TouchableOpacity>
-         {/* Display contact information for the clicked report */}
-         {clickedReportId === report.report_id && contactInfo[report.report_id] && (
-  <View style={styles.contactInfo}>
-    <Text style={styles.label}>Contact Information</Text>
-    <Text style={{ fontWeight: 'bold' }}>Name:</Text>
-    <Text>{contactInfo[report.report_id].citizen_name}</Text>
-    <Text style={{ fontWeight: 'bold' }}>Contact:</Text>
-    <Text>{contactInfo[report.report_id].contact_number}</Text>
-    <Text style={{ fontWeight: 'bold' }}>Email:</Text>
-    <Text>{contactInfo[report.report_id].email}</Text>
-  </View>
-)}
+    {/* Contact Button */}
+    <TouchableOpacity
+            style={styles.contactButton}
+            onPress={() => handleContactClick(report)}
+          >
+            <Text style={styles.contactButtonText}>Contact</Text>
+          </TouchableOpacity>
+           {/* Display contact information for the clicked report */}
+           {clickedReportId === report.report_id && contactInfo[report.report_id] && (
+            <View style={styles.contactInfo}>
+              <Text style={styles.label}>Contact Information</Text>
+              <Text style={{ fontWeight: 'bold' }}>Name:</Text>
+              <Text>{contactInfo[report.report_id].citizen_name}</Text>
+              <Text style={{ fontWeight: 'bold' }}>Contact:</Text>
+              <Text>{contactInfo[report.report_id].contact_number}</Text>
+              <Text style={{ fontWeight: 'bold' }}>Email:</Text>
+              <Text>{contactInfo[report.report_id].email}</Text>
+            </View>
+          )}
 
         </View>
       ))}
-    </ScrollView>
+    </View>
   );
 };
-
 
 
 
@@ -134,6 +142,18 @@ const styles = StyleSheet.create({
   },
   contactInfo: {
     marginTop: 10,
+  },
+  headerContainer: {
+    flexDirection: 'row',  // Align header and back button in a row
+    alignItems: 'center',  // Align items vertically
+    justifyContent: 'space-between', // Align to the ends (left and right)
+    paddingLeft: 16, // Add some padding to separate from the edge
+    paddingRight: 16, // Add some padding to separate from the edge
+    marginBottom: 16,
+  },
+
+  backButton: {
+    marginRight: 16,  // Add margin to separate from the header
   },
 });
 

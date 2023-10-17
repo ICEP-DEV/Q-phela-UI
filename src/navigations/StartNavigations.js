@@ -13,6 +13,10 @@ import TipsPage from "../screens/TipsPage";
 import AdminReport from "../AdminScreen/AdminReport";
 import AdminTips from "../AdminScreen/AdminTips";
 // import LocationSearchBar from "../screens/LocationSearchBar";
+ import Graph from "../screens/Graph";
+ import citizenReport from "../screens/citizenReport";
+
+
 
 
 const Stack = createNativeStackNavigator();
@@ -21,10 +25,11 @@ const StartNavigations = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-         initialRouteName="Landing"
+         initialRouteName="Graph"
          screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={LoginScreen} /> 
+         <Stack.Screen name="Graph" component={Graph} /> 
          <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="Landing" component={LandingScreen} /> 
         <Stack.Screen name="Register" component={RegisterScreen} />
@@ -33,7 +38,7 @@ const StartNavigations = () => {
        {/* <Stack.Screen name="LocationSearchBar" component={LocationSearchBar} /> */}
        {/* <Stack.Screen name="MyMap" component={MyMap} /> */}
        {/* <Stack.Screen name="CustomerBarChart" component={CustomerBarChart} /> */}
-       <Stack.Screen name="AdminReport" component={AdminReport} />
+       <Stack.Screen name="citizenReport" component={citizenReport} />
        <Stack.Screen name="AdminTips" component={AdminTips} />
       
       </Stack.Navigator>
