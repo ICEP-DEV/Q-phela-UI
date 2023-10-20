@@ -15,6 +15,9 @@ import AdminTips from "../AdminScreen/AdminTips";
 // import LocationSearchBar from "../screens/LocationSearchBar";
  import Graph from "../screens/Graph";
  import citizenReport from "../screens/citizenReport";
+ import HomeScreen from "../screens/HomeScreen";
+//import { UserProfile } from "../screens/UserProfile";
+import ProfileScreen from "../screens/ProfileScreen";
 
 
 
@@ -25,7 +28,7 @@ const StartNavigations = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-         initialRouteName="Graph"
+         initialRouteName="ProfileScreen"
          screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={LoginScreen} /> 
@@ -40,6 +43,8 @@ const StartNavigations = () => {
        {/* <Stack.Screen name="CustomerBarChart" component={CustomerBarChart} /> */}
        <Stack.Screen name="citizenReport" component={citizenReport} />
        <Stack.Screen name="AdminTips" component={AdminTips} />
+       <Stack.Screen name="HomeScreen" component={HomeScreen} />
+       <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
       
       </Stack.Navigator>
     </NavigationContainer>
