@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity,Pressable } from "react-native";
+import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Import useNavigation from React Navigation
 import HamburgerMenu from "../../assets/svg/HamburgerMenu";
-
+import LogoSvg from "../../assets/svg/LogoSvg";
 
 const Heading = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -22,7 +22,12 @@ const Heading = () => {
     <View style={styles.container}>
       <TouchableOpacity onPress={toggleDropdown}>
         <View style={styles.headerRoot}>
-          
+          <Image
+            source={require("../../assets/images/logo.png")}
+            width={10}
+            height={10}
+            resizeMode="center"
+          />
           <HamburgerMenu />
         </View>
       </TouchableOpacity>
@@ -35,11 +40,11 @@ const Heading = () => {
           <TouchableOpacity onPress={() => navigateToAnotherPage("TipsPage")}>
             <Text>Add Tip and View</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigateToAnotherPage("citizenReport")}>
-            <Text>View Report</Text>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigateToAnotherPage("Graph")}>
-            <Text>Starts</Text>
+            <Text>View Hotspot Stats</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigateToAnotherPage("AlertZone")}>
+            <Text>Danger Zone</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigateToAnotherPage("Login")}>
             <Text>Log Out</Text>

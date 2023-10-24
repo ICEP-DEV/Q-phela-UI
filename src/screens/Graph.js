@@ -13,7 +13,7 @@ export default function Graph() {
   const [findLocation, setFindLocation] = useState('');
   const [isFound, setIsFound] = useState(false);
 
-  const api = 'http://localhost:3009/get_survey_summary_report/';
+  const api = 'http://localhost:3008/get_survey_summary_report/';
   const welcomeMessage = `HI ${localStorage.getItem("citizen_name")}`;
 
   useEffect(() => {
