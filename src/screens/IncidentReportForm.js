@@ -257,8 +257,7 @@ const IncidentReportForm = () => {
                     value={type.value}
                     onChange={handleChange}
                     checked={incident.incidentType === type.value}
-                    className="radio-input"
-                  />
+                    className="radio-input" />
                   {type.label}
                 </label>
               ))}

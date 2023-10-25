@@ -110,12 +110,9 @@ export default function Graph() {
 
   return (
     <View style={styles.container}>
-         <Heading/>
-      <Text style={styles.welcomeMessage}>{welcomeMessage}!</Text>
+          <Heading style={styles.heading}>Hi {localStorage.getItem("citizen_name")}!</Heading>
       <Text style={styles.locationText}>
        <p>
-
-
        </p>
 
        <p>

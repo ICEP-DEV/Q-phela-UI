@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import Heading from '../components/landing-screen/Heading';
+import { ScrollView } from 'react-native-web';
 
 const API_BASE_URL = 'http://localhost:3006';
 
@@ -126,6 +127,7 @@ const TipsPage = ({ citizen }) => {
         <Text style={[styles.errorText, { textAlign: 'center' }]}>{error}</Text>
       )}
       <View style={styles.inputContainer}>
+        <ScrollView>
         <TextInput
           style={styles.input}
           placeholder="Enter your tip here"
@@ -133,6 +135,7 @@ const TipsPage = ({ citizen }) => {
           onChangeText={(text) => setTipText(text)}
           multiline
         />
+        </ScrollView>
         <View style={styles.buttonContainer}>
           <Pressable onPress={handleAddTip} style={styles.pressableButton}>
             <Text style={[styles.buttonText, { color: 'white', textAlign: 'center' }]}>Add Tip</Text>
@@ -160,7 +163,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     width: 260,
-    height:70,
     borderRadius: 4,
     backgroundColor: "#D9D9D9",
     padding: 8,
