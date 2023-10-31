@@ -5,6 +5,7 @@ import LocationSvg from "../assets/svg/LocationSvg";
 import RoundedButton from "../components/global/RoundedButton";
 import axios from 'axios';
 import { useNavigation } from "@react-navigation/native";
+import { FontAwesome } from "@expo/vector-icons";
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -13,6 +14,8 @@ const RegisterScreen = () => {
   const [contactNumber, setContactNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [error, setError] = useState('');
 
   const registerFun = async () => {
@@ -46,9 +49,6 @@ const RegisterScreen = () => {
     }
   };
 
-
-
-
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.svgtext}>
@@ -59,26 +59,48 @@ const RegisterScreen = () => {
         <TextInput
           placeholder="Username"
           onChangeText={setCitizenName}
+          
         />
         <TextInput
-          placeholder="Email"
+          placeholder="Email *"
           onChangeText={setEmail}
+          
         />
         <TextInput
           placeholder="Contact Number"
           onChangeText={setContactNumber}
+          style={styles.contactInput}
         />
-        <TextInput 
-          placeholder="Password"
-          secureTextEntry
-          onChangeText={setPassword}
-        />
-        <TextInput
-          placeholder="Confirm Password"
-          secureTextEntry
-          onChangeText={setConfirmPassword}
-        />
-
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Password *"
+            secureTextEntry={!passwordVisible}
+            onChangeText={setPassword}
+            style={styles.input}
+          />
+          <FontAwesome
+            name={passwordVisible ? "eye" : "eye-slash"}
+            size={24}
+            color={Colors.black}
+            style={styles.icon}
+            onPress={() => setPasswordVisible(!passwordVisible)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Confirm Password *"
+            secureTextEntry={!confirmPasswordVisible}
+            onChangeText={setConfirmPassword}
+            style={styles.input}
+          />
+          <FontAwesome
+            name={confirmPasswordVisible ? "eye" : "eye-slash"}
+            size={24}
+            color={Colors.black}
+            style={styles.icon}
+            onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+          />
+        </View>
         <RoundedButton
           title="Register"
           btnColor={Colors.black}
@@ -90,13 +112,12 @@ const RegisterScreen = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   root: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.gray,
+    backgroundColor: "gray",
   },
   svgtext: {
     gap: 31,
@@ -112,6 +133,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     gap: 20,
+    
+  },
+  contactInput: {
+    marginTop: 5,
+    backgroundColor:"#d3d3d3",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "blue",
+    marginLeft:37,
+    
+  },
+  input: {
+    flex: 1,
+    backgroundColor:"#d3d3d3",
+  },
+  icon: {
+    padding: 5,
   },
   errorText: {
     color: "red",

@@ -29,7 +29,7 @@ const StartNavigations = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-         initialRouteName="Landing"
+         initialRouteName="Graph"
          screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={LoginScreen} /> 
@@ -49,6 +49,8 @@ const StartNavigations = () => {
        <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
        {/* <Stack.Screen name="AlertZone" component={AlertZone} /> */}
        {/* <Stack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
+       <Stack.Screen name="AdminReport" component={AdminReport} />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );
