@@ -7,16 +7,19 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
 import Heading from '../components/landing-screen/Heading';
-import { ScrollView } from 'react-native-web';
+import { FontAwesome } from '@expo/vector-icons';
 
 const API_BASE_URL = 'http://localhost:3006';
 
 const TipsPage = ({ citizen }) => {
   const [tipText, setTipText] = useState('');
   const [tips, setTips] = useState([]);
+  const [likes, setLikes] = useState([]);
+  const [dislikes, setDislikes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -25,12 +28,12 @@ const TipsPage = ({ citizen }) => {
     fetchSafetyTips();
   }, []);
 
-  const welcomeMessage = `Welcome ${localStorage.getItem("citizen_name")}`;
+  const welcomeMessage = `Welcome ${localStorage.getItem('citizen_name')}`;
 
   const fetchSafetyTips = () => {
     setLoading(true);
     axios
-      .get("http://localhost:3006/safety_tip/")
+      .get('http://localhost:3006/safety_tip/')
       .then((response) => {
         // Sort the tips by date in descending order (newest first)
         const sortedTips = response.data.sort(
@@ -40,14 +43,14 @@ const TipsPage = ({ citizen }) => {
         setLoading(false);
       })
       .catch((error) => {
-        setError("Error fetching safety tips");
+        setError('Error fetching safety tips');
         setLoading(false);
-        console.error("Error fetching safety tips:", error);
+        console.error('Error fetching safety tips:', error);
       });
   };
 
   const handleAddTip = () => {
-    var citizen_id = localStorage.getItem("citizen_id");
+    var citizen_id = localStorage.getItem('citizen_id');
 
     var tip = { tip_description: tipText, citizen_id: Number(citizen_id) };
 
@@ -77,7 +80,58 @@ const TipsPage = ({ citizen }) => {
         setLoading(false);
       });
   };
-/*gvgyvgyyyununini*/
+
+  const handleLike = (index) => {
+    const updatedTips = [...tips];
+    if (updatedTips[index].liked === true) {
+      updatedTips[index].liked = null; // Remove the like
+    } else {
+      updatedTips[index].liked = true; // Set to like
+    }
+    setTips(updatedTips);
+  };
+
+  const handleDislike = (index) => {
+    const updatedTips = [...tips];
+    if (updatedTips[index].liked === false) {
+      updatedTips[index].liked = null; // Remove the dislike
+    } else {
+      updatedTips[index].liked = false; // Set to dislike
+    }
+    setTips(updatedTips);
+  };
+
+  const renderLikeDislikeButtons = (index, liked) => {
+    if (liked === true) {
+      return (
+        <View style={styles.thumbsContainer}>
+          <TouchableOpacity onPress={() => handleLike(index)}>
+            <FontAwesome name="thumbs-up" size={24} color="blue" />
+          </TouchableOpacity>
+        </View>
+      );
+    } else if (liked === false) {
+      return (
+        <View style={styles.thumbsContainer}>
+          <TouchableOpacity onPress={() => handleDislike(index)}>
+            <FontAwesome name="thumbs-down" size={24} color="red" />
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.thumbsContainer}>
+          <TouchableOpacity onPress={() => handleLike(index)}>
+            <FontAwesome name="thumbs-up" size={24} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleDislike(index)}>
+            <FontAwesome name="thumbs-down" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      );
+    }
+  };
+
   const formatDate = (dateString) => {
     const dateObj = new Date(dateString);
     return dateObj.toLocaleDateString(); // Formats the date as per locale
@@ -97,7 +151,7 @@ const TipsPage = ({ citizen }) => {
         <FlatList
           data={tips}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <View>
               <View style={styles.commentContainer}>
                 <Text style={styles.tipAndUser}>
@@ -106,15 +160,17 @@ const TipsPage = ({ citizen }) => {
                   </Text>{' '}
                   <Text style={styles.tip} textAlign="center">
                     {item.tip_description}
-                   
                   </Text>
                 </Text>
+                <View style={styles.thumbsContainer}>
+                  {renderLikeDislikeButtons(index, item.liked)}
+                  <Text style={styles.likeDislikeCounts}>
+                    Likes: {item.likes} Dislikes: {item.dislikes}
+                  </Text>
+                </View>
+                <Text style={styles.date}>{formatDate(item.date)}</Text>
               </View>
-              <Text style={styles.date}>
-                Date: {formatDate(item.date)}
-              </Text>
             </View>
-
           )}
           ListEmptyComponent={() => (
             <Text style={[styles.emptyList, { textAlign: 'center' }]}>
@@ -123,11 +179,11 @@ const TipsPage = ({ citizen }) => {
           )}
         />
       )}
+
       {error && (
         <Text style={[styles.errorText, { textAlign: 'center' }]}>{error}</Text>
       )}
       <View style={styles.inputContainer}>
-        <ScrollView>
         <TextInput
           style={styles.input}
           placeholder="Enter your tip here"
@@ -135,10 +191,11 @@ const TipsPage = ({ citizen }) => {
           onChangeText={(text) => setTipText(text)}
           multiline
         />
-        </ScrollView>
         <View style={styles.buttonContainer}>
           <Pressable onPress={handleAddTip} style={styles.pressableButton}>
-            <Text style={[styles.buttonText, { color: 'white', textAlign: 'center' }]}>Add Tip</Text>
+            <Text style={[styles.buttonText, { color: 'white', textAlign: 'center' }]}>
+              Add Tip
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -147,6 +204,17 @@ const TipsPage = ({ citizen }) => {
 };
 
 const styles = StyleSheet.create({
+  // ... (previous styles)
+
+  likeDislikeCounts: {
+    fontSize: 14,
+    color: '#777',
+    marginLeft: 8,
+  },
+
+
+
+
   container: {
     flex: 1,
     padding: 16,
@@ -160,17 +228,28 @@ const styles = StyleSheet.create({
     textAlign: "center", // Center-align the text
   },
   commentContainer: {
+    backgroundColor: "#D9D9D9", // Set the background color to grey
     borderWidth: 1,
     borderColor: "#ccc",
-    width: 260,
-    borderRadius: 4,
-    backgroundColor: "#D9D9D9",
+    flexDirection: 'row', // Make comments display in a row layout
+    alignItems: "center",
     padding: 8,
-    marginBottom: 8, // Add margin at the bottom
+    marginBottom: 8,
+    justifyContent: 'space-between', // Space items evenly along the horizontal axis
+    position: 'relative',
   },
   tipAndUser: {
-    flexDirection: "row",
+    flex: 1, // Allow the text to take up all available space
     alignItems: "center",
+  },
+  thumbsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  thumbsIcon: {
+    marginBottom: 8, // Adjust the spacing between thumbs
   },
   username: {
     fontWeight: 'bold',
@@ -198,7 +277,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 6,
-    padding: 8,
+    //padding: 8,
     textAlign: "center",
   },
   buttonContainer: {
@@ -209,11 +288,12 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   date: {
+    position: 'absolute',
+    right: 8,
+    bottom: 8,
     fontSize: 14,
-    textAlign: 'center',
     color: '#777',
-    marginLeft: 16,
-  },  
+  },
   welcomeMessage: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -221,6 +301,9 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     marginTop: 16,
     marginBottom: 16,
+  },
+  thumbsIcon: {
+    marginRight: 8, // Adjust the spacing
   },
 });
 

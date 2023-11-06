@@ -29,7 +29,7 @@ const StartNavigations = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-         initialRouteName="Landing"
+         initialRouteName="TipsPage"
          screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={LoginScreen} /> 
