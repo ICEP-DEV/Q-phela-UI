@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import Heading from "../components/landing-screen/Heading";
 import axios from 'axios';
 import { useNavigation } from "@react-navigation/native";
-
+import {RadioButton} from "react-native-paper";
 //const API_BASE_URL = 'http://localhost:3003'; // Update with your server's URL
-
+import { Text,View, TextInput, Button } from "react-native";
 const incidentTypes = [
   { label: 'Car jacking', value: 'Car jacking' },
   { label: 'Robbery', value: 'Robbery' },
@@ -139,172 +139,102 @@ const IncidentReportForm = () => {
     }
   };
 
-  return (
-    <div className="container">
-      <style>
-        {`
-          .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            font-family: 'Poppins', sans-serif;
-          }
+ 
 
-          h2 {
-            text-align: center;
-          }
-
-          label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-          }
-
-          input, textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 10px;
-          }
-
-          .radio-container {
-            display: flex;
-            flex-direction: column;
-          }
-
-          .radio-label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-          }
-
-          .radio-input {
-            margin-right: 10px;
-          }
-
-          .btn-container {
-            display: flex;
-            justify-content: flex-end;
-          }
-
-          .btn {
-            width: 92px;
-            height: 24px;
-            background-color: black;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-          }
-
-          .btn:hover {
-            background-color: #000000;
-          }
-
-          .enter-location {
-            height: 29px;
-          }
-
-          .incident-description {
-            height: 127px;
-          }
-
-          .incident-description-label {
-            text-align: center;
-          }
-
-         
-
-          .custom-incident-input {
-            width: calc(100% - 20px); /* Adjust the width to accommodate padding */
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 10px;
-          }
-
-
-        `}
-      </style>
+       
+      return(
+        <View style={styles.container}>
       <Heading />
-      <div className="container">
-        <h2>Incident Reporting</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Enter Location:</label>
-            <input
-              type="text"
-              name="location"
-              placeholder="Enter your location"
-              value={incident.location}
-              onChange={handleChange}
-              className="enter-location"
-            />
-          </div>
+      <>
+      </>
+      <Text style={styles.title}>Incident Reporting</Text>
+      <TextInput
+             style={styles.input}
+             placeholder="Enter your location"
+             value={incident.location}
+             onChangeText={(text) => handleChange('location', text)}
+           />
+  <Text style={styles.label}>Incident Type:</Text>
+      {incidentTypes.map((type) => (
+        <View key={type.value} style={styles.radioContainer}>
+          <RadioButton
+            value={type.value}
+            status={incident.incidentType === type.value ? 'checked' : 'unchecked'}
+            onPress={() => handleIncidentTypeChange(type.value) }
+          />
+          <Text>{type.label}</Text>
+        </View>
+      ))}
+          {incident.incidentType === 'Other' && (
+        <TextInput
+          style={styles.input}
+          placeholder="Enter custom incident type"
+          value={incident.customIncidentType}
+          onChangeText={(text) => handleChange('customIncidentType', text)}
+        />
+        )}
+        <Text style={styles.label}>Incident Description:</Text>
+        <TextInput
+          style={styles.textArea}
+          multiline
+          placeholder="Type your description"
+          value={incident.description}
+          onChangeText={(text) => handleChange('description', text)}
+        />
 
-          <div className="form-group">
-            <label>Incident Type:</label>
-            <div className="radio-container">
-              {incidentTypes.map((type) => (
-                <label key={type.value} className="radio-label">
-                  <input
-                    type="radio"
-                    name="incidentType"
-                    value={type.value}
-                    onChange={handleChange}
-                    checked={incident.incidentType === type.value}
-                    className="radio-input"
-                  />
-                  {type.label}
-                </label>
-              ))}
-            </div>
-          </div>
-{incident.incidentType === 'Other' && (
-   <div className="form-group">
-    <label>Custom Incident Type:</label>
-                <input
-                  type="text"
-                  name="customIncidentType"
-                  placeholder="Enter custom incident type"
-                  value={incident.customIncidentType}
-                 
-                 onChange={handleChange}
-                 className="custom-incident-input"
-                />
-             
-            </div>
-)}
-         
-
-          <div className="form-group">
-            <label className="incident-description-label">Incident Description:</label>
-            <textarea
-              name="description"
-              mode="text"
-              secure={true}
-              placeholder="Type your description"
-              value={incident.description}
-              onChange={handleChange}
-              onChangeText={(e)=> setDescription(e)}
-              className="incident-description"
-            />
-          </div>
-
-          <div className="btn-container">
-            <button type="submit" className="btn" onPressedFun={handleSubmit}>
-              Submit
-             
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+<Button
+  color="black"
+  backgroundColor="black"
+  title="Submit"
+  onPress={handleSubmit} s
+  tyle={styles.button}
+  />
+    </View>
   );
+};
+
+
+
+const styles = {
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: 'gray',
+  },
+  title: {
+    fontSize: 24,
+    textAlign: 'center',
+    marginBottom: 20,
+    fontWeight: 'bold',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: 'lightgray',
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  radioContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    Color:'black',
+  },
+  textArea: {
+    borderWidth: 1,
+    borderColor: 'lightgray',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: 'lightgray',
+    minHeight: 100,
+  },
 };
 
 export default IncidentReportForm;
