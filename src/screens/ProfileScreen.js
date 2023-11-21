@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, FlatList, Animated } from 'react-native';
 import Modal from 'react-native-modal';
+import HomeScreen from './HomeScreen';
 
 const ProfileScreen = () => {
   const [name, setName] = useState('John Doe');
@@ -97,6 +98,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
       </Modal>
+      <HomeScreen/>
     </View>
   );
 };
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#cae7d3',
   },
   profileImage: {
     width: 150,
@@ -147,6 +149,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     padding: 10,
     borderRadius: 5,
+    marginBottom:50,
   },
   editButtonText: {
     color: 'white',

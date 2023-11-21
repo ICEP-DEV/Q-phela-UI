@@ -20,6 +20,7 @@ import AdminTips from "../AdminScreen/AdminTips";
 import ProfileScreen from "../screens/ProfileScreen";
 import AlertZone from "../screens/AlertZone";
 import AdminDashboard from "../AdminScreen/AdminDashboard";
+import Chatbot from "../screens/Chatbot";
 
 
 
@@ -29,7 +30,7 @@ const StartNavigations = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-         initialRouteName="TipsPage"
+         initialRouteName="Graph"
          screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={LoginScreen} /> 
@@ -47,6 +48,7 @@ const StartNavigations = () => {
        <Stack.Screen name="HomeScreen" component={HomeScreen} />
        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
        <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+       <Stack.Screen name="Chatbot" component={Chatbot} />
        {/* <Stack.Screen name="AlertZone" component={AlertZone} /> */}
        {/* <Stack.Screen name="ProfileScreen" component={ProfileScreen} /> */}
       </Stack.Navigator>

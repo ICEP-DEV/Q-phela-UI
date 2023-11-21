@@ -80,7 +80,7 @@ const TipsPage = ({ citizen }) => {
         setLoading(false);
       });
   };
-
+/*
   const handleLike = (index) => {
     const updatedTips = [...tips];
     if (updatedTips[index].liked === true) {
@@ -130,7 +130,7 @@ const TipsPage = ({ citizen }) => {
         </View>
       );
     }
-  };
+  };*/
 
   const formatDate = (dateString) => {
     const dateObj = new Date(dateString);
@@ -162,12 +162,12 @@ const TipsPage = ({ citizen }) => {
                     {item.tip_description}
                   </Text>
                 </Text>
-                <View style={styles.thumbsContainer}>
+                {/* <View style={styles.thumbsContainer}>
                   {renderLikeDislikeButtons(index, item.liked)}
                   <Text style={styles.likeDislikeCounts}>
                     Likes: {item.likes} Dislikes: {item.dislikes}
                   </Text>
-                </View>
+                </View> */}
                 <Text style={styles.date}>{formatDate(item.date)}</Text>
               </View>
             </View>
@@ -218,8 +218,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
-    elevation: 12, // Add a shadow with a depth of 12
+    backgroundColor: "gray",
+    elevation: 12,
   },
   listTitle: {
     fontSize: 18,
@@ -228,21 +228,23 @@ const styles = StyleSheet.create({
     textAlign: "center", // Center-align the text
   },
   commentContainer: {
-    backgroundColor: "#D9D9D9", // Set the background color to grey
+    backgroundColor: "#D9D9D9",
     borderWidth: 1,
     borderColor: "#ccc",
-    flexDirection: 'row', // Make comments display in a row layout
+    flexDirection: 'row',
     alignItems: "center",
     padding: 8,
     marginBottom: 8,
-    justifyContent: 'space-between', // Space items evenly along the horizontal axis
+    justifyContent: 'space-between',
     position: 'relative',
+    borderRadius: 10,
+    overflow: 'hidden',
   },
   tipAndUser: {
     flex: 1, // Allow the text to take up all available space
     alignItems: "center",
   },
-  thumbsContainer: {
+  /*thumbsContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
   },
   thumbsIcon: {
     marginBottom: 8, // Adjust the spacing between thumbs
-  },
+  },*/
   username: {
     fontWeight: 'bold',
     marginRight: 8,
@@ -288,11 +290,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   date: {
-    position: 'absolute',
-    right: 8,
-    bottom: 8,
     fontSize: 14,
     color: '#777',
+    marginBottom: 8, // Add margin at the bottom to create space for the date
+    textAlign: 'right', // Align the date to the right
   },
   welcomeMessage: {
     fontSize: 24,
@@ -302,9 +303,9 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 16,
   },
-  thumbsIcon: {
+ /*thumbsIcon: {
     marginRight: 8, // Adjust the spacing
-  },
+  },*/
 });
 
 export default TipsPage;

@@ -4,6 +4,7 @@ import { BarChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
 import axios from 'axios';
 import Heading from '../components/landing-screen/Heading';
+import HomeScreen from './HomeScreen';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight=Dimensions.get('window').height;
 export default function Graph() {
@@ -113,7 +114,7 @@ export default function Graph() {
   return (
     <View style={styles.container}>
        <View style={styles.headingContainer}>
-        <Heading />
+     
      
       <Text style={styles.welcomeMessage}>{welcomeMessage}!</Text>
       </View>
@@ -157,13 +158,17 @@ export default function Graph() {
         )}
       </View>
       </View>
+      <View>
+      <HomeScreen  style={styles.homeSrc}/>
+      </View>
+     
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#cae7d3',
     alignItems: 'center',
     justifyContent: 'center',
     width:400,
@@ -175,6 +180,9 @@ const styles = StyleSheet.create({
    alignItems:'center',
    justifyContent:'center',
    
+  },
+  homeSrc:{
+    marginTop:200,
   },
   locationText: {
     marginLeft: 10,
